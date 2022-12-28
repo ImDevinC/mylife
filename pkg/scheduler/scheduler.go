@@ -91,7 +91,7 @@ func (s *Scheduler) AskQuestions(questions []lifesheet.Question) {
 					break
 				}
 				now := time.Now()
-				if now.Sub(ts) > (30 * time.Second) {
+				if now.Sub(ts) > (15 * time.Minute) {
 					s.Bot.SendMessage("Maybe you're busy, no worry. We'll skip the check-in for now")
 					ignoreQuestions = true
 					wg.Done()
