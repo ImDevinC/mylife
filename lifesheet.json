@@ -1,7 +1,7 @@
 {
     "mood": {
         "description": "Track my current mood during the day",
-        "schedule": "eightTimesADay",
+        "schedule": "fiveTimesADay",
         "questions": [
             {
                 "key": "mood",

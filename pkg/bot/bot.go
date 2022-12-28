@@ -86,7 +86,7 @@ func (t *Telegram) Start() MessageChannel {
 	return ch
 }
 
-func (t *Telegram) SendMessage(message AskedQuestion) error {
+func (t *Telegram) SendQuestion(message AskedQuestion) error {
 	log.Debug("sending message")
 	t.WaitingForResponse = true
 	t.LastQuestion = message
@@ -113,8 +113,12 @@ func (t *Telegram) SendMessage(message AskedQuestion) error {
 	return nil
 }
 
-func (t *Telegram) Get() *tgbotapi.BotAPI {
-	return t.bot
+func (t *Telegram) SendMessage(message string) error {
+	msg := tgbotapi.NewMessage(t.cfg.ChatID, message)
+	if _, err := t.bot.Send(msg); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, location *tgbotapi.Location, ch chan MessageResponse) {
