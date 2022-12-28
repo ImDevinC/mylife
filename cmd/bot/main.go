@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/imdevinc/mylife/pkg/bot"
@@ -53,9 +54,12 @@ func main() {
 			}
 			if err := db.SaveAnswer(context.TODO(), msg); err != nil {
 				log.WithError(err).Error("failed to save results")
+				telegram.SendMessage(fmt.Sprintf("failed to save answer to database. %s", err))
+			}
+			if !msg.Skipped {
+				telegram.SendMessage("👍")
 			}
 
-			log.Debug("saved response")
 		}
 	}()
 	// time.Sleep(2 * time.Second) // TODO: Fix this

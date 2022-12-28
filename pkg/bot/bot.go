@@ -170,3 +170,8 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 	t.LastQuestion = AskedQuestion{}
 	t.WaitingForResponse = false
 }
+
+func (t *Telegram) ResetQuestions() {
+	t.LastQuestion = AskedQuestion{}
+	t.WaitingForResponse = false
+}
