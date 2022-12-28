@@ -20,6 +20,7 @@ type Telegram struct {
 	cfg                *BotConfig
 	WaitingForResponse bool
 	LastQuestion       AskedQuestion
+	skipRemaining      bool
 }
 
 type MessageResponse struct {
@@ -128,7 +129,7 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 		return
 	}
 
-	if strings.HasPrefix(text, "/") && strings.ToLower(text) != "/skip" {
+	if strings.HasPrefix(text, "/") && strings.ToLower(text) != "/skip" && strings.ToLower(text) != "/skip_all" {
 		ch <- MessageResponse{
 			Text:      strings.TrimPrefix(text, "/"),
 			IsCommand: true,
@@ -153,7 +154,7 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 	resp := MessageResponse{
 		Text:        text,
 		QuestionKey: t.LastQuestion.Key,
-		Skipped:     strings.ToLower(text) == "/skip",
+		Skipped:     strings.ToLower(text) == "/skip" || strings.ToLower(text) == "/skip_all",
 	}
 
 	if location != nil {
@@ -166,7 +167,12 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 		return
 	}
 
-	ch <- resp
+	if !resp.Skipped {
+		ch <- resp
+	}
+	if strings.ToLower(text) == "/skip_all" {
+		t.skipRemaining = true
+	}
 	t.LastQuestion = AskedQuestion{}
 	t.WaitingForResponse = false
 }
@@ -174,4 +180,9 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 func (t *Telegram) ResetQuestions() {
 	t.LastQuestion = AskedQuestion{}
 	t.WaitingForResponse = false
+	t.skipRemaining = false
+}
+
+func (t *Telegram) ShouldSkipRemaining() bool {
+	return t.skipRemaining
 }

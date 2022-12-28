@@ -133,5 +133,10 @@ func (s *Scheduler) AskQuestions(questions []lifesheet.Question) {
 			s.Bot.ResetQuestions()
 			break
 		}
+		if s.Bot.ShouldSkipRemaining() {
+			s.Bot.SendMessage("Skipping all remaining questions")
+			s.Bot.ResetQuestions()
+			break
+		}
 	}
 }
