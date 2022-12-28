@@ -2,8 +2,12 @@ name: Create Telegram Bot Docker image
 
 on:
   push:
-    branches: [main]
-    paths-ignore: ["README.md", ".gitignore"]
+    branches: 
+      - main
+    paths-ignore:
+      - "README.md"
+      - ".gitignore"
+      - "assets/*"
   workflow_dispatch:
 
 jobs:
