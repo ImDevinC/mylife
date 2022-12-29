@@ -39,7 +39,7 @@ func Start(cfg *SchedulerConfig) error {
 				sched.Every(1).Day().At("22:00:00").Do(s.AskQuestions, c.Questions)
 			}
 		case "weekly":
-			sched.Every(1).Sunday().At("08:00:00").Do(s.AskQuestions, c.Questions)
+			sched.Every(1).Monday().At("08:00:00").Do(s.AskQuestions, c.Questions)
 		case "fiveTimesADay":
 			sched.Every(1).Day().At("09:00").Do(s.AskQuestions, c.Questions)
 			sched.Every(1).Day().At("12:00").Do(s.AskQuestions, c.Questions)

@@ -525,6 +525,10 @@
                 "key": "playedComputerGamesFriends",
                 "question": "Did you play computer games with friends last week?",
                 "type": "boolean"
+            },
+            {
+                "question": "🎁 Let's wrap things up",
+                "type": "header"
             }
         ]
     }
