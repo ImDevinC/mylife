@@ -8,11 +8,11 @@ import (
 
 type AnswerResponse struct {
 	ID        primitive.ObjectID `bson:"_id"`
-	Key       string
-	Answer    string
-	Skipped   bool
-	Timestamp int64
-	Type      string
+	Key       string             `bson:"key"`
+	Answer    string             `bson:"answer"`
+	Skipped   bool               `bson:"skipped"`
+	Timestamp int64              `bson:"timestamp"`
+	Type      string             `bson:"type"`
 }
 
 type PastValues struct {

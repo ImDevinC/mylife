@@ -44,14 +44,8 @@ func (d *MongoDatabase) SaveAnswer(ctx context.Context, msg AnswerResponse) erro
 	if msg.Timestamp == 0 {
 		msg.Timestamp = time.Now().Unix()
 	}
-	doc := bson.D{
-		primitive.E{Key: "key", Value: msg.Key},
-		primitive.E{Key: "answer", Value: msg.Answer},
-		primitive.E{Key: "skipped", Value: msg.Skipped},
-		primitive.E{Key: "timestamp", Value: msg.Timestamp},
-		primitive.E{Key: "type", Value: msg.Type},
-	}
-	_, err := d.collection.InsertOne(ctx, doc)
+	msg.ID = primitive.NewObjectID()
+	_, err := d.collection.InsertOne(ctx, msg)
 	if err != nil {
 		return fmt.Errorf("failed to save answer. %v", err)
 	}
