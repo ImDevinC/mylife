@@ -139,7 +139,9 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 
 	if t.LastQuestion.Key == "" {
 		msg := tgbotapi.NewMessage(t.cfg.ChatID, "I didn't ask a question")
-		t.bot.Send(msg)
+		if _, err := t.bot.Send(msg); err != nil {
+			log.WithError(err).Error("failed to send message")
+		}
 		return
 	}
 
@@ -185,4 +187,13 @@ func (t *Telegram) ResetQuestions() {
 
 func (t *Telegram) ShouldSkipRemaining() bool {
 	return t.skipRemaining
+}
+func (t *Telegram) SendImageURL(u string) error {
+	image := tgbotapi.NewInputMediaPhoto(tgbotapi.FileURL(u))
+	mediaGroup := tgbotapi.NewMediaGroup(t.cfg.ChatID, []interface{}{image})
+	_, err := t.bot.Request(mediaGroup)
+	if err != nil {
+		return fmt.Errorf("failed to send image. %v", err)
+	}
+	return nil
 }

@@ -55,9 +55,9 @@ func Start(cfg *SchedulerConfig) error {
 	return nil
 }
 
-// StartQuestions looks at the key being provided to determine
+// ProcessCommand looks at the key being provided to determine
 // which set of questions to ask
-func StartQuestions(cfg *SchedulerConfig, key string) {
+func ProcessCommand(cfg *SchedulerConfig, key string) {
 	s := Scheduler{Bot: cfg.Bot}
 	key = strings.ToLower(key)
 	var questionKey string

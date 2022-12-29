@@ -14,6 +14,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const chartAPI string = "https://chart.googleapis.com/chart?cht=lc&chd=t:%s&chs=800x350&chl=%s&chtt=%s&chf=bg,s,e0e0e0&chco=000000,0000FF&chma=30,30,30,30&chds=%d,%d"
+
 func main() {
 	log.SetFormatter(&log.JSONFormatter{})
 	cfg, err := config.New()
@@ -46,13 +48,31 @@ func main() {
 		msgChan := telegram.Start()
 		for msg := range msgChan {
 			log.WithField("response", msg.Text).Debug("got response")
-			if msg.IsCommand {
-				log.WithField("response", msg.Text).Debug("got command")
-				message := strings.ToLower(msg.Text)
-				go scheduler.StartQuestions(&scheduleCfg, message)
+			if msg.IsCommand && strings.HasPrefix(msg.Text, "graph ") {
+				key := strings.TrimPrefix(msg.Text, "graph ")
+				vals, err := db.GetValues(context.TODO(), key)
+				if err != nil {
+					log.WithError(err).Error("failed to save get values from database")
+					telegram.SendMessage(fmt.Sprintf("failed to get graph info from database. %s", err))
+					continue
+				}
+				url := fmt.Sprintf(chartAPI, strings.Join(vals.Values, ","), strings.Join(vals.Times, "%7C"), msg.QuestionKey, vals.Minimum, vals.Maximum)
+				if err := telegram.SendImageURL(url); err != nil {
+					log.WithError(err).Error("failed to send graph")
+					telegram.SendMessage(fmt.Sprintf("failed to send graph. %s", err))
+				}
 				continue
 			}
-			if err := db.SaveAnswer(context.TODO(), msg); err != nil {
+			if msg.IsCommand {
+				message := strings.ToLower(msg.Text)
+				go scheduler.ProcessCommand(&scheduleCfg, message)
+				continue
+			}
+			if err := db.SaveAnswer(context.TODO(), database.AnswerResponse{
+				Key:     msg.QuestionKey,
+				Answer:  msg.Text,
+				Skipped: msg.Skipped,
+			}); err != nil {
 				log.WithError(err).Error("failed to save results")
 				telegram.SendMessage(fmt.Sprintf("failed to save answer to database. %s", err))
 			}
@@ -62,7 +82,6 @@ func main() {
 
 		}
 	}()
-	// time.Sleep(2 * time.Second) // TODO: Fix this
 	if err := scheduler.Start(&scheduleCfg); err != nil {
 		log.Fatal(err)
 	}
