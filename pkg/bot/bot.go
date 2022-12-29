@@ -28,6 +28,7 @@ type MessageResponse struct {
 	QuestionKey string
 	Skipped     bool
 	IsCommand   bool
+	Acknowledge bool
 }
 
 type AskedQuestion struct {
@@ -107,8 +108,13 @@ func (t *Telegram) SendQuestion(message AskedQuestion) error {
 			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("No", "false")),
 		)
 		msg.ReplyMarkup = keyb
+	} else if message.Type == "location" {
+		btn := tgbotapi.NewKeyboardButtonLocation("Provide your location")
+		keyb := tgbotapi.NewOneTimeReplyKeyboard([]tgbotapi.KeyboardButton{btn})
+		msg.ReplyMarkup = keyb
 	}
-	if _, err := t.bot.Send(msg); err != nil {
+	_, err := t.bot.Send(msg)
+	if err != nil {
 		return err
 	}
 	return nil
@@ -116,6 +122,9 @@ func (t *Telegram) SendQuestion(message AskedQuestion) error {
 
 func (t *Telegram) SendMessage(message string) error {
 	msg := tgbotapi.NewMessage(t.cfg.ChatID, message)
+	msg.ReplyMarkup = map[string]bool{
+		"hide_keyboard": true,
+	}
 	if _, err := t.bot.Send(msg); err != nil {
 		return err
 	}
@@ -131,8 +140,9 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 
 	if strings.HasPrefix(text, "/") && strings.ToLower(text) != "/skip" && strings.ToLower(text) != "/skip_all" {
 		ch <- MessageResponse{
-			Text:      strings.TrimPrefix(text, "/"),
-			IsCommand: true,
+			Text:        strings.TrimPrefix(text, "/"),
+			IsCommand:   true,
+			Acknowledge: false,
 		}
 		return
 	}
@@ -157,15 +167,20 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 		Text:        text,
 		QuestionKey: t.LastQuestion.Key,
 		Skipped:     strings.ToLower(text) == "/skip" || strings.ToLower(text) == "/skip_all",
+		Acknowledge: true,
 	}
 
 	if location != nil {
 		resp.QuestionKey = "locationLat"
 		resp.Text = fmt.Sprintf("%f", location.Latitude)
+		resp.Acknowledge = false
 		ch <- resp
 		resp.QuestionKey = "locationLong"
 		resp.Text = fmt.Sprintf("%f", location.Longitude)
+		resp.Acknowledge = true
 		ch <- resp
+		t.LastQuestion = AskedQuestion{}
+		t.WaitingForResponse = false
 		return
 	}
 

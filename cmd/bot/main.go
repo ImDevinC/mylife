@@ -76,7 +76,7 @@ func main() {
 				log.WithError(err).Error("failed to save results")
 				telegram.SendMessage(fmt.Sprintf("failed to save answer to database. %s", err))
 			}
-			if !msg.Skipped {
+			if !msg.Skipped && msg.Acknowledge {
 				telegram.SendMessage("👍")
 			}
 
