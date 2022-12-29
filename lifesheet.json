@@ -45,11 +45,6 @@
                 }
             },
             {
-                "key": "sleepDuration",
-                "question": "How many hours did you sleep?",
-                "type": "number"
-            },
-            {
                 "key": "fitbitTimeAsleep",
                 "question": "How many hours asleep were you according to Fitbit (round to nearest 30mins)",
                 "type": "number"
@@ -61,32 +56,12 @@
             },
             {
                 "key": "gratefulFor",
-                "question": "I am grateful for? [item 1]",
-                "type": "text"
-            },
-            {
-                "key": "gratefulFor",
-                "question": "I am grateful for? [item 2] /skip",
-                "type": "text"
-            },
-            {
-                "key": "gratefulFor",
-                "question": "I am grateful for? [item 3] /skip",
+                "question": "I am grateful for?",
                 "type": "text"
             },
             {
                 "key": "whatWouldMakeTodayGreat",
-                "question": "What would make today great? [item 1]",
-                "type": "text"
-            },
-            {
-                "key": "whatWouldMakeTodayGreat",
-                "question": "What would make today great? [item 2] /skip",
-                "type": "text"
-            },
-            {
-                "key": "whatWouldMakeTodayGreat",
-                "question": "What would make today great? [item 3] /skip",
+                "question": "What would make today great?",
                 "type": "text"
             },
             {
@@ -115,17 +90,7 @@
             },
             {
                 "key": "amazingThingsThatHappenedToday",
-                "question": "3 amazing things that happened today... [item 1]",
-                "type": "text"
-            },
-            {
-                "key": "amazingThingsThatHappenedToday",
-                "question": "3 amazing things that happened today... [item 2] /skip",
-                "type": "text"
-            },
-            {
-                "key": "amazingThingsThatHappenedToday",
-                "question": "3 amazing things that happened today... [item 3] /skip",
+                "question": "Did anything amazing happen today?",
                 "type": "text"
             },
             {
@@ -153,9 +118,6 @@
                     "2": "Had 3 drinks",
                     "1": "Had 4-5 drinks",
                     "0": "Got wasted"
-                },
-                "replies": {
-                    "0": "Haha, hope you had a good time and the calories were all worth it. Make sure to still hit your protein goal and eat extra clean the next few days"
                 }
             },
             {
@@ -234,11 +196,6 @@
                 }
             },
             {
-                "key": "gym",
-                "question": "Did you work out in a gym today?",
-                "type": "boolean"
-            },
-            {
                 "key": "nap",
                 "question": "Did you nap today?",
                 "type": "boolean"
@@ -267,18 +224,13 @@
                 }
             },
             {
-                "key": "fishoilIntake",
-                "question": "Did you take your fish oil today?",
-                "type": "boolean"
-            },
-            {
                 "key": "dailySteps",
-                "question": "How many steps did you take according to Apple Health?",
+                "question": "How many steps did you take?",
                 "type": "number"
             },
             {
                 "key": "fitbitRestingHeartRate",
-                "question": "What was today's resting heart rate according to FitBit",
+                "question": "What was today's resting heart rate?",
                 "type": "number"
             },
             {
@@ -456,6 +408,10 @@
                     "1": "Before 1:30",
                     "0": "Later"
                 }
+            },
+            {
+                "question": "🌙 Have a great night!",
+                "type": "header"
             }
         ]
     },
@@ -506,7 +462,7 @@
             },
             {
                 "key": "enoughTimeFamily",
-                "question": "Do you feel like you've took enough time last week to spend with your family (siblings, parents and greater family)? If based outside Austria, apply this to FaceTime calls",
+                "question": "Do you feel like you've took enough time last week to spend with your family (siblings, parents and greater family)?",
                 "type": "range",
                 "buttons": {
                     "5": "Spent enough time",
@@ -533,32 +489,6 @@
             {
                 "question": "🎁 Let's wrap things up",
                 "type": "header"
-            },
-            {
-                "key": "travel",
-                "question": "How much did you travel last week?",
-                "type": "range",
-                "buttons": {
-                    "5": "Mostly stationary, minimal commute",
-                    "4": "Normal travel/commute",
-                    "3": "More than usual travels through car or train",
-                    "2": "Longer travels through car or train",
-                    "1": "1 flight",
-                    "0": "2 flights or more"
-                }
-            },
-            {
-                "key": "travelLiving",
-                "question": "Did you live stationary?",
-                "type": "range",
-                "buttons": {
-                    "5": "Stayed in a familiar env",
-                    "4": "Stayed in a semi-permanent env",
-                    "3": "Stayed in a new environment",
-                    "2": "Stayed at least 2 places",
-                    "1": "Stayed at more than 3 places",
-                    "0": "Lots of one-off stays"
-                }
             },
             {
                 "key": "urgeToTravel",
