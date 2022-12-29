@@ -41,13 +41,11 @@ func NewMongoDB(ctx context.Context, cfg MongoDatabaseOptions) (Database, error)
 }
 
 func (d *MongoDatabase) SaveAnswer(ctx context.Context, msg AnswerResponse) error {
-	if msg.Timestamp == 0 {
-		msg.Timestamp = time.Now().Unix()
+	if err := populateFields(&msg); err != nil {
+		return fmt.Errorf("failed to populate data. %w", err)
 	}
-	msg.ID = primitive.NewObjectID()
-	_, err := d.collection.InsertOne(ctx, msg)
-	if err != nil {
-		return fmt.Errorf("failed to save answer. %v", err)
+	if _, err := d.collection.InsertOne(ctx, msg); err != nil {
+		return fmt.Errorf("failed to save answer. %w", err)
 	}
 	return nil
 }
@@ -85,6 +83,44 @@ func (d *MongoDatabase) GetValues(ctx context.Context, key string) (PastValues, 
 		}
 	}
 	return returnValue, nil
+}
+
+func populateFields(answer *AnswerResponse) error {
+	answer.ID = primitive.NewObjectID()
+	ts := time.Now()
+	answer.Timestamp = ts.Unix()
+
+	answer.Day = ts.Day()
+	answer.Hour = ts.Hour()
+	answer.Minute = ts.Minute()
+	answer.Year = ts.Year()
+	month := int(ts.Month())
+	answer.Month = month
+	if month <= 3 {
+		answer.Quarter = 1
+	} else if month <= 6 {
+		answer.Quarter = 2
+	} else if month <= 9 {
+		answer.Quarter = 3
+	} else {
+		answer.Quarter = 4
+	}
+	_, week := ts.ISOWeek()
+	answer.Week = week
+	yearWeekRaw := fmt.Sprintf("%d%02d", ts.Year(), week)
+	yearWeek, err := strconv.Atoi(yearWeekRaw)
+	if err != nil {
+		return fmt.Errorf("failed to parse yearWeek. %w", err)
+	}
+	answer.YearWeek = yearWeek
+
+	yearMonthRaw := fmt.Sprintf("%d%02d", ts.Year(), ts.Month())
+	yearMonth, err := strconv.Atoi(yearMonthRaw)
+	if err != nil {
+		return fmt.Errorf("failed to parse yearMonth. %w", err)
+	}
+	answer.YearMonth = yearMonth
+	return nil
 }
 
 // func (d *MongoDatabase) GetAverage(ctx context.Context, key string) error {

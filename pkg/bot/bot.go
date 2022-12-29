@@ -26,17 +26,19 @@ type Telegram struct {
 type MessageResponse struct {
 	Text        string
 	QuestionKey string
-	Skipped     bool
 	IsCommand   bool
 	Acknowledge bool
+	Question    string
+	Type        string
 }
 
 type AskedQuestion struct {
-	Text    string
-	Key     string
-	Replies map[string]string
-	Type    string
-	Buttons map[string]string
+	Question string
+	Text     string
+	Key      string
+	Replies  map[string]string
+	Type     string
+	Buttons  map[string]string
 }
 
 type MessageChannel chan MessageResponse
@@ -166,14 +168,13 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 	resp := MessageResponse{
 		Text:        text,
 		QuestionKey: t.LastQuestion.Key,
-		Skipped:     strings.ToLower(text) == "/skip" || strings.ToLower(text) == "/skip_all",
-		Acknowledge: true,
+		Question:    t.LastQuestion.Question,
+		Type:        t.LastQuestion.Type,
 	}
 
 	if location != nil {
 		resp.QuestionKey = "locationLat"
 		resp.Text = fmt.Sprintf("%f", location.Latitude)
-		resp.Acknowledge = false
 		ch <- resp
 		resp.QuestionKey = "locationLong"
 		resp.Text = fmt.Sprintf("%f", location.Longitude)
@@ -184,13 +185,31 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 		return
 	}
 
-	if !resp.Skipped {
-		ch <- resp
-	}
+	resp.Acknowledge = true
+
 	if strings.ToLower(text) == "/skip_all" {
 		t.skipRemaining = true
+		t.LastQuestion = AskedQuestion{}
+		t.WaitingForResponse = false
+	} else if strings.ToLower(text) == "/skip" {
+		t.LastQuestion = AskedQuestion{}
+		t.WaitingForResponse = false
+	} else {
+		ch <- resp
 	}
-	t.LastQuestion = AskedQuestion{}
+
+	// if strings.ToLower(text) != "/skip" && strings.ToLower(text) != "/skip_all" {
+	// 	ch <- resp
+
+	// }
+	// if strings.ToLower(text) == "/skip_all" {
+	// 	t.skipRemaining = true
+	// }
+	// t.LastQuestion = AskedQuestion{}
+	// t.WaitingForResponse = false
+}
+
+func (t *Telegram) NextQuestion() {
 	t.WaitingForResponse = false
 }
 

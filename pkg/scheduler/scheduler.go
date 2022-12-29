@@ -103,7 +103,14 @@ func (s *Scheduler) AskQuestions(questions []lifesheet.Question) {
 		}()
 		wg.Wait()
 		msg := q.Text
-		s.Bot.SendQuestion(bot.AskedQuestion{Text: msg, Key: q.Key, Replies: q.Replies, Type: q.Type, Buttons: q.Buttons})
+		s.Bot.SendQuestion(bot.AskedQuestion{
+			Question: q.Text,
+			Text:     msg,
+			Key:      q.Key,
+			Replies:  q.Replies,
+			Type:     q.Type,
+			Buttons:  q.Buttons,
+		})
 		if q.Type == "header" {
 			s.Bot.WaitingForResponse = false
 			continue

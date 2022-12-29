@@ -10,9 +10,19 @@ type AnswerResponse struct {
 	ID        primitive.ObjectID `bson:"_id"`
 	Key       string             `bson:"key"`
 	Answer    string             `bson:"answer"`
-	Skipped   bool               `bson:"skipped"`
 	Timestamp int64              `bson:"timestamp"`
 	Type      string             `bson:"type"`
+	Day       int                `bson:"day"`
+	Hour      int                `bson:"hour"`
+	Minute    int                `bson:"minute"`
+	Year      int                `bson:"year"`
+	Month     int                `bson:"month"`
+	Quarter   int                `bson:"quarter"`
+	YearWeek  int                `bson:"yearWeek"`
+	YearMonth int                `bson:"yearMonth"`
+	Week      int                `bson:"week"`
+	Question  string             `bson:"question"`
+	Source    string             `bson:"source"`
 }
 
 type PastValues struct {

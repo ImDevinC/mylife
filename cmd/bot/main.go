@@ -68,18 +68,21 @@ func main() {
 				go scheduler.ProcessCommand(&scheduleCfg, message)
 				continue
 			}
+
 			if err := db.SaveAnswer(context.TODO(), database.AnswerResponse{
-				Key:     msg.QuestionKey,
-				Answer:  msg.Text,
-				Skipped: msg.Skipped,
+				Question: msg.Question,
+				Key:      msg.QuestionKey,
+				Answer:   msg.Text,
+				Source:   "telegram",
+				Type:     msg.Type,
 			}); err != nil {
 				log.WithError(err).Error("failed to save results")
 				telegram.SendMessage(fmt.Sprintf("failed to save answer to database. %s", err))
 			}
-			if !msg.Skipped && msg.Acknowledge {
+			if msg.Acknowledge {
 				telegram.SendMessage("👍")
 			}
-
+			telegram.NextQuestion()
 		}
 	}()
 	if err := scheduler.Start(&scheduleCfg); err != nil {
