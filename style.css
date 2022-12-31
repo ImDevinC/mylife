@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.row-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.stat-block {
+    border-radius: 8px;
+    padding: 8px 8px;
+}
+
+.stat-block-header {
+    margin-left: 16px;
+}
+
+.stat-block-performance {
+    color: #fcfeff;
+    background-color: #0e1422;
+}
+
+.percentages {
+    flex-direction: row;
+    display: flex;
+}
+
+.percent {
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.subtext {
+    color: #525663;
+}
+
+.vertical {
+    border-left: 1px solid #525663;
+    height: 100px;
+}
+
+.breakdown {
+    margin-left: 16px;
+    margin-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+#breakdown-1>.fa-solid {
+    color: #f74924;
+}
+
+#breakdown-2>.fa-solid {
+    color: #95d0d8;
+}
+
+#breakdown-3>.fa-solid {
+    color: #c3ab9a;
+}
+
+/* .stat-block-activity {
+    color: #071c2b;
+    background-color: #95d0d8;
+}
+
+.stat-block-engagement {
+    color: #071c2b;
+    background-color: ##c3ab9a;
+} */
