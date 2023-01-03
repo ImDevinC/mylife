@@ -165,27 +165,17 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 		}
 	}
 
+	if t.LastQuestion.Key == "city" {
+		text = fmt.Sprintf("%f,%f", location.Latitude, location.Longitude)
+	}
+
 	resp := MessageResponse{
 		Text:        text,
 		QuestionKey: t.LastQuestion.Key,
 		Question:    t.LastQuestion.Question,
 		Type:        t.LastQuestion.Type,
+		Acknowledge: true,
 	}
-
-	if location != nil {
-		resp.QuestionKey = "locationLat"
-		resp.Text = fmt.Sprintf("%f", location.Latitude)
-		ch <- resp
-		resp.QuestionKey = "locationLong"
-		resp.Text = fmt.Sprintf("%f", location.Longitude)
-		resp.Acknowledge = true
-		ch <- resp
-		t.LastQuestion = AskedQuestion{}
-		t.WaitingForResponse = false
-		return
-	}
-
-	resp.Acknowledge = true
 
 	if strings.ToLower(text) == "/skip_all" {
 		t.skipRemaining = true
@@ -197,16 +187,6 @@ func (t *Telegram) ProcessMessage(chatID int64, messageID int, text string, loca
 	} else {
 		ch <- resp
 	}
-
-	// if strings.ToLower(text) != "/skip" && strings.ToLower(text) != "/skip_all" {
-	// 	ch <- resp
-
-	// }
-	// if strings.ToLower(text) == "/skip_all" {
-	// 	t.skipRemaining = true
-	// }
-	// t.LastQuestion = AskedQuestion{}
-	// t.WaitingForResponse = false
 }
 
 func (t *Telegram) NextQuestion() {
