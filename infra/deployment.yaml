@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mylife
+  namespace: mylife
+  labels:
+    app: mylife
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mylife
+  template:
+    metadata:
+      namespace: mylife
+      name: mylife
+      labels:
+        app: mylife
+    spec:
+      imagePullSecrets:
+            - name: dockerauth
+      serviceAccountName: mylife
+      containers:
+        - name: mylife
+          image: ghcr.io/imdevinc/mylife-telegram:597da34
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: mylife-telegram-details
+          env:
+            - name: MONGO_USERNAME
+              value: root
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-creds
+                  key: mongodb-root-password
+            - name: MONGO_URL
+              value: mongodb.mongodb
+            - name: MONGO_PORT
+              value: "27017"
+            - name: MONGO_DB
+              value: mylife

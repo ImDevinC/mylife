@@ -14,6 +14,7 @@ type Category struct {
 	Description string     `json:"description"`
 	Schedule    string     `json:"schedule"`
 	Questions   []Question `json:"questions"`
+	Times       []string   `json:"times"`
 }
 
 type Question struct {

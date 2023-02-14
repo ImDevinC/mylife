@@ -46,6 +46,10 @@ func Start(cfg *SchedulerConfig) error {
 			sched.Every(1).Day().At("15:00").Do(s.AskQuestions, c.Questions)
 			sched.Every(1).Day().At("18:00").Do(s.AskQuestions, c.Questions)
 			sched.Every(1).Day().At("21:00").Do(s.AskQuestions, c.Questions)
+		case "specific":
+			for _, t := range c.Times {
+				sched.Every(1).Day().At(t).Do(s.AskQuestions, c.Questions)
+			}
 		default:
 			return fmt.Errorf("invalid schedule. %s", c.Schedule)
 		}
