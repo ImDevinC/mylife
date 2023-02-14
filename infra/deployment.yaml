@@ -18,11 +18,11 @@ spec:
         app: mylife
     spec:
       imagePullSecrets:
-            - name: dockerauth
+        - name: dockerauth
       serviceAccountName: mylife
       containers:
         - name: mylife
-          image: ghcr.io/imdevinc/mylife-telegram:597da34
+          image: ghcr.io/imdevinc/mylife:v0.1
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
