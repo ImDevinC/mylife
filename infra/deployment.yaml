@@ -22,7 +22,7 @@ spec:
       serviceAccountName: mylife
       containers:
         - name: mylife
-          image: ghcr.io/imdevinc/mylife:v0.1
+          image: ghcr.io/imdevinc/mylife:v0.2
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
