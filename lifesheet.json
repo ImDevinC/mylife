@@ -3,7 +3,7 @@
         "description": "Track my current mood during the day",
         "schedule": "specific",
         "times": [
-            "14:25",
+            "12:00",
             "17:00",
             "22:00"
         ],
