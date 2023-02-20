@@ -5,12 +5,12 @@
         "times": [
             "12:00",
             "17:00",
-            "22:00"
+            "21:00"
         ],
         "questions": [
             {
                 "key": "mood",
-                "question": "How are you feeling today? /skip",
+                "question": "How are you feeling today?",
                 "type": "range",
                 "buttons": {
                     "5": "happy",
@@ -23,12 +23,23 @@
             },
             {
                 "key": "grateful",
-                "question": "What is something you're grateful for? /skip",
+                "question": "What is something you're grateful for?",
                 "type": "text"
             },
             {
                 "question": "Great! We'll check in later",
                 "type": "header"
+            }
+        ]
+    },
+    "asleep": {
+        "description": "Getting ready for bed",
+        "schedule": "asleep",
+        "questions": [
+            {
+                "key": "workout",
+                "question": "Did you workout today?",
+                "type": "boolean"
             }
         ]
     }
