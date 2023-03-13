@@ -34,7 +34,7 @@
     },
     "asleep": {
         "description": "Getting ready for bed",
-        "schedule": "asleep",
+        "schedule": "specific",
         "questions": [
             {
                 "key": "workout",
